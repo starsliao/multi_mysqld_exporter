@@ -1,0 +1,20 @@
+version: "3.2"
+services:
+  mysqld_exporter:
+    image: swr.cn-south-1.myhuaweicloud.com/starsl.cn/mysqld_exporter:latest
+    container_name: mysqld_exporter
+    hostname: mysqld_exporter
+    restart: always
+    ports:
+      - "9104:9104"
+    volumes:
+      - /usr/share/zoneinfo/PRC:/etc/localtime
+    environment:
+      MYSQLD_EXPORTER_PASSWORD: xxxxxxxxxxxxx
+    entrypoint:
+      - /bin/mysqld_exporter
+      - --collect.info_schema.innodb_metrics
+      - --collect.info_schema.tables
+      - --collect.info_schema.processlist
+      - --collect.info_schema.tables.databases=*
+      - --mysqld.username=xxxxxxxxxx
