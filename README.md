@@ -11,3 +11,47 @@
 - docker-compose中有2个变量：监控专用的mysql账号和密码，注意修改掉后再启动。
 - **该docker-compose配置方式是所有的mysql实例都配置了一样的mysql监控账号和密码。**
 - 如果你有不同mysql实例需要配置不同监控账号密码的需求，请参考官方readme使用配置文件的方式启动。
+
+### prometheus配置说明：
+静态配置方式：
+```
+  - job_name: multi_mysqld_exporter
+    static_configs:
+      - targets:
+        - server1:3306
+        - server2:3306
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: localhost:9104
+```
+consul动态配置方式参考：
+```
+  - job_name: multi_mysqld
+    scrape_interval: 30s
+    metrics_path: /probe
+    consul_sd_configs:
+      - server: '10.0.0.26:8500'
+        token: 'xxxxxxxxxxxxxx'
+        services: ['hw_mysqld_exporter']
+    relabel_configs:
+      - source_labels: [__meta_consul_service_address,__meta_consul_service_port]
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        target_label: __param_target
+        replacement: $1:$2
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 10.0.0.26:9104
+      - source_labels: ["__meta_consul_service_metadata_iaccount"]
+        target_label: iaccount
+      - source_labels: ["__meta_consul_service_metadata_igroup"]
+        target_label: igroup
+      - source_labels: ["__meta_consul_service_metadata_iname"]
+        target_label: iname
+      - source_labels: ["__meta_consul_service_metadata_iid"]
+        target_label: iid
+```
