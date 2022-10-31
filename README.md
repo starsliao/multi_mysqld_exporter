@@ -1,7 +1,7 @@
 # multi_mysqld_exporter
 #### 官方main版本的代码已经支持多目标的mysqld_exporter，只是还没有发Releases。
 - https://github.com/prometheus/mysqld_exporter/tree/main
-- 20220924版本，对应提交id如下：
+- 当前main为2022.09.24更新的版本，对应提交id如下：
 - https://github.com/prometheus/mysqld_exporter/commit/503f1fa222f0afc74a1dcf4a0ef5a7c2dfa4d105
 
 ### 本仓库基于以上源码编译了二进制包和docker镜像，可参考docker-compose文件使用。
