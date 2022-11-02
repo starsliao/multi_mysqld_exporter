@@ -12,7 +12,13 @@
 - **该docker-compose配置方式是所有的mysql实例都配置了一样的mysql监控账号和密码。**
 - 如果你有不同mysql实例需要配置不同监控账号密码的需求，请参考官方readme使用配置文件的方式启动。
 
+## 推荐使用【ConsulManager】来管理主机、MySQL与站点监控，自动同步云厂商资源到Prometheus，更多惊喜！
+## [【ConsulManager介绍】](https://github.com/starsliao/ConsulManager)
 ### [如何优雅的使用一个mysqld_exporter监控所有的MySQL实例](https://github.com/starsliao/ConsulManager/blob/main/docs/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%80%E4%B8%AAmysqld_exporter%E7%9B%91%E6%8E%A7%E6%89%80%E6%9C%89%E7%9A%84MySQL%E5%AE%9E%E4%BE%8B.md)
+- 💖增加RDS云数据库监控接入：支持同步华为云、阿里云、腾讯云的RDS信息到Consul并接入到Prometheus监控！
+- 💖提供了一个支持1对多目标的Mysqld_exporter(官方main分支编译)：使用1个mysqld_exporter就可以监控所有的MySQL了！
+- 💖增加了MySQL的Grafana监控看板：基于官方版本汉化，增加总览页，增加表大小行数统计，优化重要指标展示！
+
 
 ### prometheus配置说明：
 静态配置方式：
