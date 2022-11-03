@@ -24,6 +24,8 @@
 静态配置方式：
 ```
   - job_name: multi_mysqld_exporter
+    scrape_interval: 30s
+    metrics_path: /probe
     static_configs:
       - targets:
         - server1:3306
@@ -34,7 +36,7 @@
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: localhost:9104
+        replacement: 你的mysqld_exporter地址:9104
 ```
 consul动态配置方式参考：
 ```
