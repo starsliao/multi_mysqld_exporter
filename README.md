@@ -55,7 +55,7 @@ consul动态配置方式参考：
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 10.0.0.26:9104
+        replacement: 你的mysqld_exporter地址:9104
       - source_labels: ["__meta_consul_service_metadata_iaccount"]
         target_label: iaccount
       - source_labels: ["__meta_consul_service_metadata_igroup"]
