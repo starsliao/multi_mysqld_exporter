@@ -7,6 +7,7 @@
 ### 本仓库基于以上源码编译了二进制包和docker镜像，可参考docker-compose文件使用。
 
 ### docker-compose使用说明：
+https://github.com/starsliao/multi_mysqld_exporter/blob/main/docker-compose.yml
 - 该镜像是专门用于多mysql实例使用一个mysqld_exporter。
 - docker-compose中有2个变量：**监控专用的mysql账号和密码**，注意修改掉后再启动。
 - **该docker-compose配置方式是所有的mysql实例都配置了一样的mysql监控账号和密码。**
