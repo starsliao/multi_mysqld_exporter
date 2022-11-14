@@ -4,17 +4,23 @@ services:
     image: swr.cn-south-1.myhuaweicloud.com/starsl.cn/mysqld_exporter:latest
     container_name: mysqld_exporter
     hostname: mysqld_exporter
-    restart: always
-    ports:
-      - "9104:9104"
+    restart: unless-stopped
     volumes:
       - /usr/share/zoneinfo/PRC:/etc/localtime
     environment:
-      MYSQLD_EXPORTER_PASSWORD: xxxxxxxxxxxxx
+      MYSQLD_EXPORTER_PASSWORD: 监控专用密码
     entrypoint:
       - /bin/mysqld_exporter
       - --collect.info_schema.innodb_metrics
       - --collect.info_schema.tables
       - --collect.info_schema.processlist
       - --collect.info_schema.tables.databases=*
-      - --mysqld.username=xxxxxxxxxx
+      - --mysqld.username=监控专用用户名
+    expose:
+      - 9104
+    network_mode: "host"
+    
+    
+# 监控专用账户权限配置：
+# CREATE USER '监控专用用户名'@'multi_mysqld_exporter主机的IP' IDENTIFIED BY '监控专用密码' WITH MAX_USER_CONNECTIONS 10;
+# GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO '监控专用用户名'@'multi_mysqld_exporter主机的IP';
