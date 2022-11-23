@@ -10,6 +10,7 @@
 vi collector/exporter.go 
         level.Error(e.logger).Log("msg", "Error opening connection to database", "err", err, "dsn:", e.dsn)
         level.Error(e.logger).Log("msg", "Error pinging mysqld", "err", err, "dsn:", e.dsn)
+        level.Error(e.logger).Log("msg", "Error from scraper", "scraper", scraper.Name(), "err", err, "dsn:", e.dsn)
 ```    
 ```   
 CGO_ENABLED=0 go build
