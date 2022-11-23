@@ -6,6 +6,17 @@
 
 ### 本仓库基于以上源码编译了二进制包和docker镜像，可参考docker-compose文件使用。
 
+```
+vi collector/exporter.go 
+        level.Error(e.logger).Log("msg", "Error opening connection to database", "err", err, "dsn:", e.dsn)
+        level.Error(e.logger).Log("msg", "Error pinging mysqld", "err", err, "dsn:", e.dsn)
+```    
+```   
+CGO_ENABLED=0 go build
+```
+
+---
+
 ### docker-compose使用说明：
 https://github.com/starsliao/multi_mysqld_exporter/blob/main/docker-compose.yml
 - 该镜像是专门用于多mysql实例使用一个mysqld_exporter。
