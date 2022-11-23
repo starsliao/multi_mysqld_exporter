@@ -5,6 +5,7 @@
 ### 本仓库基于以上源码编译了二进制包和docker镜像，可参考docker-compose文件使用。
 
 ```
+# 输出日志带详细实例信息。
 vi collector/exporter.go 
         level.Error(e.logger).Log("msg", "Error opening connection to database", "err", err, "dsn:", e.dsn)
         level.Error(e.logger).Log("msg", "Error pinging mysqld", "err", err, "dsn:", e.dsn)
