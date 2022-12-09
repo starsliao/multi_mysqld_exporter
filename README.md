@@ -11,7 +11,8 @@ vi collector/exporter.go
         level.Error(e.logger).Log("msg", "Error pinging mysqld", "err", err, "dsn:", e.dsn)
         level.Error(e.logger).Log("msg", "Error from scraper", "scraper", scraper.Name(), "err", err, "dsn:", e.dsn)
 ```    
-```   
+``` 
+## 编译
 CGO_ENABLED=0 go build
 ```
 
@@ -24,13 +25,19 @@ https://github.com/starsliao/multi_mysqld_exporter/blob/main/docker-compose.yml
 - **该docker-compose配置方式是所有的mysql实例都配置了一样的mysql监控账号和密码。**
 - 如果你有不同mysql实例需要配置不同监控账号密码的需求，请参考官方readme使用配置文件的方式启动。
 
-## 推荐使用【ConsulManager】来管理主机、MySQL与站点监控，自动同步云厂商资源到Prometheus，更多惊喜！
-## [【ConsulManager介绍】](https://github.com/starsliao/ConsulManager)
-### [如何优雅的使用一个mysqld_exporter监控所有的MySQL实例：](https://github.com/starsliao/ConsulManager/blob/main/docs/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%80%E4%B8%AAmysqld_exporter%E7%9B%91%E6%8E%A7%E6%89%80%E6%9C%89%E7%9A%84MySQL%E5%AE%9E%E4%BE%8B.md)
+### 推荐使用【ConsulManager】来管理主机、MySQL、Redis与站点监控，自动同步云厂商资源到Prometheus，更多惊喜！
+#### [【ConsulManager介绍】](https://github.com/starsliao/ConsulManager)
+#### [如何优雅的使用一个mysqld_exporter监控所有的MySQL实例：](https://github.com/starsliao/ConsulManager/blob/main/docs/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%80%E4%B8%AAmysqld_exporter%E7%9B%91%E6%8E%A7%E6%89%80%E6%9C%89%E7%9A%84MySQL%E5%AE%9E%E4%BE%8B.md)
 - 💖增加RDS云数据库监控接入：支持同步华为云、阿里云、腾讯云的RDS信息到Consul并接入到Prometheus监控！
 - 💖提供了一个支持1对多目标的Mysqld_exporter(官方main分支编译)：使用1个mysqld_exporter就可以监控所有的MySQL了！
 - 💖增加了MySQL的Grafana监控看板：基于官方版本汉化，增加总览页，增加表大小行数统计，优化重要指标展示！
 
+---
+### Mysqld Exporter Dashboard 中文版 [https://grafana.com/grafana/dashboards/17320](https://grafana.com/grafana/dashboards/17320)
+**该看板基于Mysqld_Exporter的监控指标设计，基于官方版本汉化，增加总览页，增加表大小行数统计，优化重要指标展示。**
+#### 对于图表中的CPU、内存、磁盘等部分Mysqld_Exporter不提供的指标：
+- 自建Mysql：从node-exporter中获取以上信息，通过instance的IP部分进行关联。
+- 云DRS：从ConsulManager-MySQL中获取，会根据实例ID进行关联。(数据来自云监控，从ConsulManager的Prometheus配置生成菜单中可生成配置。)
 
 ### 单独使用multi_mysqld_exporter的prometheus配置说明：
 **静态配置方式：**
@@ -50,6 +57,9 @@ https://github.com/starsliao/multi_mysqld_exporter/blob/main/docker-compose.yml
       - target_label: __address__
         replacement: 你的mysqld_exporter地址:9104
 ```
+
+---
+
 **基于ConsulManager的动态配置方式参考(可在【ConsulManager-MySQL管理-Prometheus配置】菜单中自动生成)：**
 ```
   - job_name: 'ConsulManager-MySQL'
