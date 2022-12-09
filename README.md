@@ -32,8 +32,8 @@ https://github.com/starsliao/multi_mysqld_exporter/blob/main/docker-compose.yml
 - 💖增加了MySQL的Grafana监控看板：基于官方版本汉化，增加总览页，增加表大小行数统计，优化重要指标展示！
 
 
-### 单独使用mysqld_exporter的prometheus配置说明：
-静态配置方式：
+### 单独使用multi_mysqld_exporter的prometheus配置说明：
+**静态配置方式：**
 ```
   - job_name: multi_mysqld_exporter
     scrape_interval: 30s
@@ -50,16 +50,36 @@ https://github.com/starsliao/multi_mysqld_exporter/blob/main/docker-compose.yml
       - target_label: __address__
         replacement: 你的mysqld_exporter地址:9104
 ```
-consul动态配置方式参考：
+**基于ConsulManager的动态配置方式参考(可在【ConsulManager-MySQL管理-Prometheus配置】菜单中自动生成)：**
 ```
-  - job_name: multi_mysqld
+  - job_name: 'ConsulManager-MySQL'
     scrape_interval: 30s
+    scrape_timeout: 15s
+    static_configs:
+    - targets:
+      - alicloud/xxxx/cn-shenzhen
+      - alicloud/yyyy/cn-shenzhen
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __metrics_path__
+        regex: (.*)
+        replacement: /api/cloud_mysql_metrics/${1}
+      - target_label: __address__
+        replacement: 10.0.0.26:1026
+
+  - job_name: multi_mysqld_exporter
+    scrape_interval: 15s
+    scrape_timeout: 5s
     metrics_path: /probe
     consul_sd_configs:
       - server: '10.0.0.26:8500'
-        token: 'xxxxxxxxxxxxxx'
-        services: ['hw_mysqld_exporter']
+        token: 'xxxxxxxxxx'
+        refresh_interval: 30s
+        services: ['selfrds_exporter', 'alicloud_xxxx_rds']
     relabel_configs:
+      - source_labels: [__meta_consul_tags]
+        regex: .*OFF.*
+        action: drop
       - source_labels: [__meta_consul_service_address,__meta_consul_service_port]
         regex: ([^:]+)(?::\d+)?;(\d+)
         target_label: __param_target
@@ -67,13 +87,27 @@ consul动态配置方式参考：
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: 你的mysqld_exporter地址:9104
-      - source_labels: ["__meta_consul_service_metadata_iaccount"]
-        target_label: iaccount
-      - source_labels: ["__meta_consul_service_metadata_igroup"]
-        target_label: igroup
-      - source_labels: ["__meta_consul_service_metadata_iname"]
-        target_label: iname
-      - source_labels: ["__meta_consul_service_metadata_iid"]
+        replacement: 10.0.0.26:9104
+      - source_labels: ['__meta_consul_service_metadata_vendor']
+        target_label: vendor
+      - source_labels: ['__meta_consul_service_metadata_region']
+        target_label: region
+      - source_labels: ['__meta_consul_service_metadata_group']
+        target_label: group
+      - source_labels: ['__meta_consul_service_metadata_account']
+        target_label: account
+      - source_labels: ['__meta_consul_service_metadata_name']
+        target_label: name
+      - source_labels: ['__meta_consul_service_metadata_iid']
         target_label: iid
+      - source_labels: ['__meta_consul_service_metadata_exp']
+        target_label: exp
+      - source_labels: ['__meta_consul_service_metadata_cpu']
+        target_label: cpu
+      - source_labels: ['__meta_consul_service_metadata_mem']
+        target_label: mem
+      - source_labels: ['__meta_consul_service_metadata_disk']
+        target_label: disk
+      - source_labels: ['__meta_consul_service_metadata_itype']
+        target_label: itype
 ```
