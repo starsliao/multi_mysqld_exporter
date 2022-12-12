@@ -25,6 +25,14 @@ https://github.com/starsliao/multi_mysqld_exporter/blob/main/docker-compose.yml
 - **该docker-compose配置方式是所有的mysql实例都配置了一样的mysql监控账号和密码。**
 - 如果你有不同mysql实例需要配置不同监控账号密码的需求，请参考官方readme使用配置文件的方式启动。
 
+#### 监控专用账户权限配置：
+```
+CREATE USER '监控专用用户名'@'multi_mysqld_exporter主机的IP' IDENTIFIED BY '监控专用密码' WITH MAX_USER_CONNECTIONS 10;
+GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO '监控专用用户名'@'multi_mysqld_exporter主机的IP';
+```
+
+---
+
 ### 推荐使用【ConsulManager】来管理主机、MySQL、Redis与站点监控，自动同步云厂商资源到Prometheus，更多惊喜！
 #### [【ConsulManager介绍】](https://github.com/starsliao/ConsulManager)
 #### [如何优雅的使用一个mysqld_exporter监控所有的MySQL实例：](https://github.com/starsliao/ConsulManager/blob/main/docs/%E5%A6%82%E4%BD%95%E4%BC%98%E9%9B%85%E7%9A%84%E4%BD%BF%E7%94%A8%E4%B8%80%E4%B8%AAmysqld_exporter%E7%9B%91%E6%8E%A7%E6%89%80%E6%9C%89%E7%9A%84MySQL%E5%AE%9E%E4%BE%8B.md)
